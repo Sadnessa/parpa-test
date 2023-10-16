@@ -1,30 +1,73 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <nav class="navbar">
+    <img src="/logo.svg" />
+    <ul>
+      <li v-for="item in navList" :key="item.name">
+        <RouterLink :to="item.link">{{ item.name }}</RouterLink>
+      </li>
+    </ul>
+  </nav>
+  <main>
+    <RouterView />
+  </main>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<script setup lang="ts">
+import { useParpaStore } from "../src/store/store";
+const store = useParpaStore();
+console.log(store);
+store.getProductsList();
+const navList = [
+  { name: "Главная", link: "/" },
+  { name: "Корзина", link: "/cart" },
+];
+</script>
+
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap");
+
+body {
+  margin: 0;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: "Roboto", sans-serif;
+  padding: 0 100px;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+</style>
+
+<style lang="scss" scoped>
+.navbar {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  ul {
+    display: flex;
+    gap: 24px;
+    padding: 0;
+    margin: 0;
+
+    li {
+      list-style-type: none;
+
+      a {
+        text-decoration: none;
+
+        &.router-link-active {
+          color: rgba(186, 150, 125, 1);
+        }
+      }
+    }
+  }
+}
+
+main {
+  display: flex;
+  flex-grow: 1;
 }
 </style>
