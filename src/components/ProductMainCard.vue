@@ -9,18 +9,28 @@
           {{ props.productName }}
         </div>
         <div class="productDescription">
-          {{ props.productDescriotion }}
+          {{ props.productDescription }}
         </div>
       </div>
 
       <div class="productPriceSection">
         <div class="productPriceSection__price">{{ props.productPrice }} ₽</div>
+        <CustomButton
+          flat
+          padding="4px 6px"
+          @click="$emit('cartClick')"
+          rounded
+        >
+          <img src="/basket.svg" />
+        </CustomButton>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import CustomButton from "./base/CustomButton.vue";
+
 const props = defineProps({
   image: {
     type: String,
@@ -32,7 +42,7 @@ const props = defineProps({
     default: "Kekw",
   },
 
-  productDescriotion: {
+  productDescription: {
     type: String,
     default: "Me",
   },
@@ -42,6 +52,8 @@ const props = defineProps({
     default: 31209321031,
   },
 });
+
+const emits = defineEmits(["cartClick"]);
 </script>
 
 <style lang="scss" scoped>
@@ -50,24 +62,40 @@ const props = defineProps({
   flex-direction: column;
 
   border-radius: 10px;
-  height: 450px;
   box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 
   &__image {
-    max-height: 280px;
-
     img {
-      height: 280px;
+      width: 100%;
     }
   }
 
   &__info {
     padding: 20px;
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+
+    .productInfoSection {
+      .productName {
+        font-size: 24px;
+        font-weight: 400;
+        line-height: 28px;
+        letter-spacing: 0em;
+      }
+
+      .productDescription {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 26px;
+        letter-spacing: 0em;
+        color: rgba(51, 51, 51, 0.5);
+      }
+    }
+    .productPriceSection {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 66px;
+    }
   }
 }
 </style>

@@ -1,22 +1,29 @@
 <template>
   <nav class="navbar">
-    <img src="/logo.svg" />
-    <ul>
-      <li v-for="item in navList" :key="item.name">
-        <RouterLink :to="item.link">{{ item.name }}</RouterLink>
-      </li>
-    </ul>
+    <div class="navbar__wrapper">
+      <img src="/logo.svg" @click="$router.push({ name: 'Home' })" />
+      <ul>
+        <li v-for="item in navList" :key="item.name">
+          <RouterLink :to="item.link">{{ item.name }}</RouterLink>
+        </li>
+      </ul>
+    </div>
   </nav>
   <main>
-    <RouterView />
+    <RouterView v-slot="{ Component }">
+      <Transition name="fade">
+        <Component :is="Component"></Component>
+      </Transition>
+    </RouterView>
   </main>
 </template>
 
 <script setup lang="ts">
 import { useParpaStore } from "../src/store/store";
+
 const store = useParpaStore();
-console.log(store);
 store.getProductsList();
+
 const navList = [
   { name: "Главная", link: "/" },
   { name: "Корзина", link: "/cart" },
@@ -35,16 +42,31 @@ body {
   flex-direction: column;
   height: 100vh;
   font-family: "Roboto", sans-serif;
-  padding: 0 100px;
+  position: relative;
 }
 </style>
 
 <style lang="scss" scoped>
 .navbar {
-  height: 100px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  height: 100px;
+  width: 100%;
+  position: fixed;
+  background-color: white;
+  z-index: 1000;
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+    padding: 0 20px;
+
+    img {
+      cursor: pointer;
+    }
+  }
 
   ul {
     display: flex;
@@ -57,6 +79,7 @@ body {
 
       a {
         text-decoration: none;
+        color: black;
 
         &.router-link-active {
           color: rgba(186, 150, 125, 1);
@@ -69,5 +92,54 @@ body {
 main {
   display: flex;
   flex-grow: 1;
+  padding-top: 100px;
+}
+
+section {
+  padding: 0 20px;
+  padding-bottom: 20px;
+}
+
+@include xl {
+  .navbar__wrapper,
+  section {
+    margin: 0 auto;
+    max-width: 1300px;
+  }
+}
+
+@include md {
+  .navbar__wrapper,
+  section {
+    margin: 0 auto;
+    max-width: 992px;
+  }
+}
+
+@include sm {
+  .navbar__wrapper,
+  section {
+    margin: 0 auto;
+    max-width: 768px;
+  }
+}
+
+@include xs {
+  .navbar__wrapper,
+  section {
+    margin: 0 auto;
+    max-width: 576px;
+  }
+}
+
+//Transition
+.fade-enter-to,
+.fade-leave-from {
+  transition: opacity 0.5s ease-in;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
