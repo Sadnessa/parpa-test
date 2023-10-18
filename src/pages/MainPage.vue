@@ -4,18 +4,19 @@
       <CustomLoader loaderColor="#BA967D" />
     </div>
     <template v-else>
-      <div class="mainPage__products">
-        <TransitionGroup name="list">
-          <ProductMainCard
-            v-for="product in products"
-            :key="product.id"
-            :productName="product.title"
-            :productPrice="Number(product.price)"
-            :productDescription="getCategory(Number(product.category))"
-            @cartClick="addToCart(product)"
-          />
-        </TransitionGroup>
+      <div class="mainPage__products" ref="productsBlock">
+        <!-- <TransitionGroup name="list"> -->
+        <ProductMainCard
+          v-for="product in products"
+          :key="product.id"
+          :productName="product.title"
+          :productPrice="Number(product.price)"
+          :productDescription="getCategory(Number(product.category))"
+          @cartClick="addToCart(product)"
+        />
+        <!-- </TransitionGroup> -->
       </div>
+
       <div class="mainPage__actions">
         <CustomButton @click="loadPrev" v-if="store.paginationValue > 0">
           Назад
@@ -30,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, watch, ref } from "vue";
 
 import ProductMainCard from "../components/ProductMainCard.vue";
 import CustomButton from "../components/base/CustomButton.vue";
@@ -38,7 +39,11 @@ import CustomLoader from "../components/base/CustomLoader.vue";
 
 import { useParpaStore } from "../store/store";
 
+import anime from "animejs/lib/anime.es.js";
+
 const store = useParpaStore();
+
+const productsBlock = ref(null);
 
 const cardsPerPage = 4;
 
@@ -77,6 +82,15 @@ const addToCart = (product: { [key: string]: string }) => {
 const getCategory = (id: number) => {
   return store.categories[id];
 };
+
+watch(products, () => {
+  anime({
+    targets: productsBlock.value,
+    opacity: [0, 1],
+    easing: "linear",
+    duration: 600,
+  });
+});
 </script>
 
 <style lang="scss" scoped>
@@ -92,6 +106,7 @@ const getCategory = (id: number) => {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 50px;
+    padding-top: 10px;
 
     @include mdAndDown {
       grid-template-columns: repeat(2, 1fr);
@@ -116,19 +131,14 @@ const getCategory = (id: number) => {
   }
 }
 
-// .list-move,
-// .list-enter-active,
-// .list-leave-active {
-//   transition: all 0.3s ease;
-// }
+//transition between products pages
+.list-enter-to,
+.list-leave-from {
+  transition: opacity 1s ease;
+}
 
-// .list-enter-from,
-// .list-leave-to,
-// .list-leave-from,
-// .list-leave-active,
-// .list-enter-active,
-// .list-move {
-//   opacity: 0;
-//   transition: all 0.3s ease;
-// }
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+}
 </style>

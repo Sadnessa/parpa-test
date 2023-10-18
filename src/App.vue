@@ -135,7 +135,7 @@ section {
 //Transition
 .fade-enter-to,
 .fade-leave-from {
-  transition: opacity 0.5s ease-in;
+  transition: opacity 0.5s ease;
 }
 
 .fade-enter-from,

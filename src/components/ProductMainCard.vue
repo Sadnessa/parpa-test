@@ -74,8 +74,11 @@ const emits = defineEmits(["cartClick"]);
   &__info {
     padding: 20px;
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 
     .productInfoSection {
+      flex-grow: 1;
       .productName {
         font-size: 24px;
         font-weight: 400;
@@ -94,7 +97,8 @@ const emits = defineEmits(["cartClick"]);
     .productPriceSection {
       display: flex;
       justify-content: space-between;
-      margin-top: 66px;
+      align-items: center;
+      margin-top: 60px;
     }
   }
 }

@@ -87,6 +87,20 @@ button {
     }
   }
 
+  &:active {
+    &::after {
+      position: absolute;
+      content: "";
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: black;
+      opacity: 0.2;
+      transition: all ease 0.3s;
+    }
+  }
+
   &.shadowed {
     box-shadow: 0px 4px 4px 0px #00000040;
   }
